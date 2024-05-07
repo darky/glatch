@@ -60,11 +60,11 @@ fn try_list(item) -> Result(MatchedType(x), _) {
   dynamic.shallow_list(item)
   |> result.map(fn(r) {
     case list.first(r) {
-      Ok(x) -> {
-        x
+      Ok(r) -> {
+        r
         |> dynamic.dynamic
-        |> result.map(fn(x) {
-          x
+        |> result.map(fn(r) {
+          r
           |> get_type
           |> IsList
         })

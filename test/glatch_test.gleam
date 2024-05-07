@@ -11,7 +11,7 @@ pub fn main() {
 
 pub fn string_test() {
   case glatch.get_type("ok") {
-    IsString(x) -> x
+    IsString(s) -> s
     _ -> "fail"
   }
   |> should.equal("ok")
