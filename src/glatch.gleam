@@ -4,15 +4,15 @@ import gleam/option.{type Option, None, Some}
 import gleam/result
 
 pub type MatchedType(x) {
-  TInt(Int)
-  TString(String)
-  TBool(Bool)
-  TFloat(Float)
-  TList(MatchedType(x))
-  TOption(Option(MatchedType(x)))
-  TResult(Result(MatchedType(x), MatchedType(x)))
-  TNotFound
-  TEmpty
+  IsInt(Int)
+  IsString(String)
+  IsBool(Bool)
+  IsFloat(Float)
+  IsList(MatchedType(x))
+  IsOption(Option(MatchedType(x)))
+  IsResult(Result(MatchedType(x), MatchedType(x)))
+  IsNotFound
+  IsEmpty
 }
 
 pub fn get_type(item: t) -> MatchedType(x) {
@@ -32,28 +32,28 @@ pub fn get_type(item: t) -> MatchedType(x) {
     )
   case resp {
     Ok(resp) -> resp
-    Error(Nil) -> TNotFound
+    Error(Nil) -> IsNotFound
   }
 }
 
 fn try_int(item) -> Result(MatchedType(x), _) {
   dynamic.int(item)
-  |> result.map(fn(r) { TInt(r) })
+  |> result.map(fn(r) { IsInt(r) })
 }
 
 fn try_string(item) -> Result(MatchedType(x), _) {
   dynamic.string(item)
-  |> result.map(fn(r) { TString(r) })
+  |> result.map(fn(r) { IsString(r) })
 }
 
 fn try_bool(item) -> Result(MatchedType(x), _) {
   dynamic.bool(item)
-  |> result.map(fn(r) { TBool(r) })
+  |> result.map(fn(r) { IsBool(r) })
 }
 
 fn try_float(item) -> Result(MatchedType(x), _) {
   dynamic.float(item)
-  |> result.map(fn(r) { TFloat(r) })
+  |> result.map(fn(r) { IsFloat(r) })
 }
 
 fn try_list(item) -> Result(MatchedType(x), _) {
@@ -66,10 +66,10 @@ fn try_list(item) -> Result(MatchedType(x), _) {
         |> result.map(fn(x) {
           x
           |> get_type
-          |> TList
+          |> IsList
         })
       }
-      Error(Nil) -> Ok(TList(TEmpty))
+      Error(Nil) -> Ok(IsList(IsEmpty))
     }
   })
   |> result.flatten
@@ -87,10 +87,10 @@ fn try_optional(item) -> Result(MatchedType(x), _) {
           r
           |> get_type
           |> Some
-          |> TOption
+          |> IsOption
         })
       }
-      None -> Ok(TOption(None))
+      None -> Ok(IsOption(None))
     }
   })
   |> result.flatten
@@ -108,7 +108,7 @@ fn try_result(item) -> Result(MatchedType(x), _) {
           r
           |> get_type
           |> Ok
-          |> TResult
+          |> IsResult
         })
       }
       Error(r) -> {
@@ -118,7 +118,7 @@ fn try_result(item) -> Result(MatchedType(x), _) {
           r
           |> get_type
           |> Error
-          |> TResult
+          |> IsResult
         })
       }
     }
