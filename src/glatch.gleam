@@ -25,8 +25,8 @@ pub fn get_type(item: t) -> MatchedType(x) {
         try_string,
         try_bool,
         try_list,
-        try_optional,
         try_result,
+        try_optional,
       ],
       fn(type_check) { type_check(dyn) },
     )
