@@ -1,6 +1,7 @@
 import glatch.{
-  IsBool, IsEmpty, IsFloat, IsInt, IsList, IsOption, IsResult, IsString,
+  IsBool, IsDict, IsEmpty, IsFloat, IsInt, IsList, IsOption, IsResult, IsString,
 }
+import gleam/dict
 import gleam/dynamic
 import gleam/option.{None, Some}
 import gleeunit
@@ -93,6 +94,30 @@ pub fn result_error_test() {
 pub fn dynamic_test() {
   case glatch.get_type(dynamic.from("ok")) {
     IsString(s) -> s
+    _ -> "fail"
+  }
+  |> should.equal("ok")
+}
+
+pub fn dict_key_test() {
+  case glatch.get_type(dict.from_list([#("test-key", "test-value")])) {
+    IsDict(IsString(s), _) -> s
+    _ -> "fail"
+  }
+  |> should.equal("test-key")
+}
+
+pub fn dict_value_test() {
+  case glatch.get_type(dict.from_list([#("test-key", "test-value")])) {
+    IsDict(_, IsString(s)) -> s
+    _ -> "fail"
+  }
+  |> should.equal("test-value")
+}
+
+pub fn dict_empty_test() {
+  case glatch.get_type(dict.from_list([])) {
+    IsDict(IsEmpty, IsEmpty) -> "ok"
     _ -> "fail"
   }
   |> should.equal("ok")

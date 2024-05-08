@@ -1,3 +1,4 @@
+import gleam/dict
 import gleam/dynamic
 import gleam/list
 import gleam/option.{type Option, None, Some}
@@ -11,6 +12,7 @@ pub type MatchedType(x) {
   IsList(MatchedType(x))
   IsOption(Option(MatchedType(x)))
   IsResult(Result(MatchedType(x), MatchedType(x)))
+  IsDict(MatchedType(x), MatchedType(x))
   IsNotFound
   IsEmpty
 }
@@ -25,6 +27,7 @@ pub fn get_type(item: t) -> MatchedType(x) {
         try_string,
         try_bool,
         try_list,
+        try_dict,
         try_result,
         try_optional,
         try_dynamic,
@@ -112,4 +115,19 @@ fn try_dynamic(item) -> Result(MatchedType(x), _) {
   item
   |> dynamic.dynamic
   |> result.map(fn(x) { get_type(x) })
+}
+
+fn try_dict(item) -> Result(MatchedType(x), _) {
+  item
+  |> dynamic.dict(dynamic.dynamic, dynamic.dynamic)
+  |> result.map(fn(r) {
+    case dict.size(r) > 0 {
+      True -> {
+        let entities = dict.to_list(r)
+        let assert Ok(#(key, val)) = list.first(entities)
+        IsDict(get_type(key), get_type(val))
+      }
+      False -> IsDict(IsEmpty, IsEmpty)
+    }
+  })
 }
