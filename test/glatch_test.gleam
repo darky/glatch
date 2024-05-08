@@ -1,6 +1,7 @@
 import glatch.{
   IsBool, IsEmpty, IsFloat, IsInt, IsList, IsOption, IsResult, IsString,
 }
+import gleam/dynamic
 import gleam/option.{None, Some}
 import gleeunit
 import gleeunit/should
@@ -87,4 +88,12 @@ pub fn result_error_test() {
     _ -> "fail"
   }
   |> should.equal("test")
+}
+
+pub fn dynamic_test() {
+  case glatch.get_type(dynamic.from("ok")) {
+    IsString(s) -> s
+    _ -> "fail"
+  }
+  |> should.equal("ok")
 }

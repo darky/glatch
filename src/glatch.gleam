@@ -27,6 +27,7 @@ pub fn get_type(item: t) -> MatchedType(x) {
         try_list,
         try_result,
         try_optional,
+        try_dynamic,
       ],
       fn(type_check) { type_check(dyn) },
     )
@@ -62,17 +63,12 @@ fn try_list(item) -> Result(MatchedType(x), _) {
     case list.first(r) {
       Ok(r) -> {
         r
-        |> dynamic.dynamic
-        |> result.map(fn(r) {
-          r
-          |> get_type
-          |> IsList
-        })
+        |> get_type
+        |> IsList
       }
-      Error(Nil) -> Ok(IsList(IsEmpty))
+      Error(Nil) -> IsList(IsEmpty)
     }
   })
-  |> result.flatten
 }
 
 fn try_optional(item) -> Result(MatchedType(x), _) {
@@ -82,18 +78,13 @@ fn try_optional(item) -> Result(MatchedType(x), _) {
     case r {
       Some(r) -> {
         r
-        |> dynamic.dynamic
-        |> result.map(fn(r) {
-          r
-          |> get_type
-          |> Some
-          |> IsOption
-        })
+        |> get_type
+        |> Some
+        |> IsOption
       }
-      None -> Ok(IsOption(None))
+      None -> IsOption(None)
     }
   })
-  |> result.flatten
 }
 
 fn try_result(item) -> Result(MatchedType(x), _) {
@@ -103,25 +94,22 @@ fn try_result(item) -> Result(MatchedType(x), _) {
     case r {
       Ok(r) -> {
         r
-        |> dynamic.dynamic
-        |> result.map(fn(r) {
-          r
-          |> get_type
-          |> Ok
-          |> IsResult
-        })
+        |> get_type
+        |> Ok
+        |> IsResult
       }
       Error(r) -> {
         r
-        |> dynamic.dynamic
-        |> result.map(fn(r) {
-          r
-          |> get_type
-          |> Error
-          |> IsResult
-        })
+        |> get_type
+        |> Error
+        |> IsResult
       }
     }
   })
-  |> result.flatten
+}
+
+fn try_dynamic(item) -> Result(MatchedType(x), _) {
+  item
+  |> dynamic.dynamic
+  |> result.map(fn(x) { get_type(x) })
 }
