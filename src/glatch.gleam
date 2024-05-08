@@ -17,7 +17,7 @@ pub type MatchedType(x) {
   IsEmpty
 }
 
-pub fn get_type(item: t) -> MatchedType(x) {
+pub fn get_type(item: t) {
   let dyn = dynamic.from(item)
   let resp =
     list.find_map(
@@ -40,27 +40,27 @@ pub fn get_type(item: t) -> MatchedType(x) {
   }
 }
 
-fn try_int(item) -> Result(MatchedType(x), _) {
+fn try_int(item) {
   dynamic.int(item)
   |> result.map(fn(r) { IsInt(r) })
 }
 
-fn try_string(item) -> Result(MatchedType(x), _) {
+fn try_string(item) {
   dynamic.string(item)
   |> result.map(fn(r) { IsString(r) })
 }
 
-fn try_bool(item) -> Result(MatchedType(x), _) {
+fn try_bool(item) {
   dynamic.bool(item)
   |> result.map(fn(r) { IsBool(r) })
 }
 
-fn try_float(item) -> Result(MatchedType(x), _) {
+fn try_float(item) {
   dynamic.float(item)
   |> result.map(fn(r) { IsFloat(r) })
 }
 
-fn try_list(item) -> Result(MatchedType(x), _) {
+fn try_list(item) {
   dynamic.shallow_list(item)
   |> result.map(fn(r) {
     case list.first(r) {
@@ -74,7 +74,7 @@ fn try_list(item) -> Result(MatchedType(x), _) {
   })
 }
 
-fn try_optional(item) -> Result(MatchedType(x), _) {
+fn try_optional(item) {
   item
   |> dynamic.optional(dynamic.dynamic)
   |> result.map(fn(r) {
@@ -90,7 +90,7 @@ fn try_optional(item) -> Result(MatchedType(x), _) {
   })
 }
 
-fn try_result(item) -> Result(MatchedType(x), _) {
+fn try_result(item) {
   item
   |> dynamic.result(dynamic.dynamic, dynamic.dynamic)
   |> result.map(fn(r) {
@@ -111,13 +111,13 @@ fn try_result(item) -> Result(MatchedType(x), _) {
   })
 }
 
-fn try_dynamic(item) -> Result(MatchedType(x), _) {
+fn try_dynamic(item) {
   item
   |> dynamic.dynamic
   |> result.map(fn(x) { get_type(x) })
 }
 
-fn try_dict(item) -> Result(MatchedType(x), _) {
+fn try_dict(item) {
   item
   |> dynamic.dict(dynamic.dynamic, dynamic.dynamic)
   |> result.map(fn(r) {
