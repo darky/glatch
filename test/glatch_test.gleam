@@ -1,11 +1,16 @@
 import glatch.{
-  IsBool, IsDict, IsEmpty, IsFloat, IsInt, IsList, IsOption, IsResult, IsString,
+  IsBool, IsDict, IsEmpty, IsFloat, IsInt, IsList, IsNotFound, IsOption,
+  IsResult, IsString,
 }
 import gleam/dict
 import gleam/dynamic
 import gleam/option.{None, Some}
 import gleeunit
 import gleeunit/should
+
+type ForNotFound {
+  ForNotFound
+}
 
 pub fn main() {
   gleeunit.main()
@@ -118,6 +123,14 @@ pub fn dict_value_test() {
 pub fn dict_empty_test() {
   case glatch.get_type(dict.from_list([])) {
     IsDict(IsEmpty, IsEmpty) -> "ok"
+    _ -> "fail"
+  }
+  |> should.equal("ok")
+}
+
+pub fn not_found_test() {
+  case glatch.get_type(ForNotFound) {
+    IsNotFound -> "ok"
     _ -> "fail"
   }
   |> should.equal("ok")
