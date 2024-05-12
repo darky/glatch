@@ -3,6 +3,7 @@ import gleam/dynamic
 import gleam/list
 import gleam/option.{type Option, None, Some}
 import gleam/result
+import gledo
 
 pub type MatchedType(x) {
   IsInt(Int)
@@ -30,7 +31,6 @@ pub fn get_type(item: t) {
         try_dict,
         try_result,
         try_optional,
-        try_dynamic,
       ],
       fn(type_check) { type_check(dyn) },
     )
@@ -76,7 +76,7 @@ fn try_list(item) {
 
 fn try_optional(item) {
   item
-  |> dynamic.optional(dynamic.dynamic)
+  |> gledo.decode_option
   |> result.map(fn(r) {
     case r {
       Some(r) -> {
@@ -109,12 +109,6 @@ fn try_result(item) {
       }
     }
   })
-}
-
-fn try_dynamic(item) {
-  item
-  |> dynamic.dynamic
-  |> result.map(fn(x) { get_type(x) })
 }
 
 fn try_dict(item) {
