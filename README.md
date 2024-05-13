@@ -17,8 +17,8 @@ import glatch.{IsString}
 import gleam/string
 
 pub fn main() {
-  case glatch.get_type("world") {
-    IsString(world) -> "Hello, " <> world
+  case glatch.get_type("Lucy") {
+    IsString(_) -> "Hello, 𓇼"
     unknown -> "Who are you? " <> string.inspect(unknown)
   }
 }
@@ -38,7 +38,11 @@ Further documentation can be found at <https://hexdocs.pm/glatch>.
   - [x] nested type check
   - [x] empty type check
 - [x] Option
+  - [x] Some type check
+  - [x] None type check  
 - [x] Result
+  - [x] Ok type check
+  - [x] Error type check  
 - [x] Dict
   - [x] key type check
   - [x] value type check
