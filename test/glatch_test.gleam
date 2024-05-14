@@ -1,6 +1,7 @@
 import glatch.{
   IsBool, IsDict, IsEmpty, IsFloat, IsInt, IsList, IsNotFound, IsOption,
-  IsResult, IsString,
+  IsResult, IsString, IsTuple0, IsTuple1, IsTuple2, IsTuple3, IsTuple4, IsTuple5,
+  IsTuple6,
 }
 import gleam/dict
 import gleam/dynamic
@@ -134,4 +135,80 @@ pub fn not_found_test() {
     _ -> "fail"
   }
   |> should.equal("ok")
+}
+
+pub fn tuple_empty_test() {
+  case glatch.get_type(#()) {
+    IsTuple0 -> "ok"
+    _ -> "fail"
+  }
+  |> should.equal("ok")
+}
+
+pub fn tuple_1_test() {
+  case glatch.get_type(#("test")) {
+    IsTuple1(IsString(s)) -> s
+    _ -> "fail"
+  }
+  |> should.equal("test")
+}
+
+pub fn tuple_2_test() {
+  case glatch.get_type(#("test1", "test2")) {
+    IsTuple2(IsString(s1), IsString(s2)) -> [s1, s2]
+    _ -> []
+  }
+  |> should.equal(["test1", "test2"])
+}
+
+pub fn tuple_3_test() {
+  case glatch.get_type(#("test1", "test2", "test3")) {
+    IsTuple3(IsString(s1), IsString(s2), IsString(s3)) -> [s1, s2, s3]
+    _ -> []
+  }
+  |> should.equal(["test1", "test2", "test3"])
+}
+
+pub fn tuple_4_test() {
+  case glatch.get_type(#("test1", "test2", "test3", "test4")) {
+    IsTuple4(IsString(s1), IsString(s2), IsString(s3), IsString(s4)) -> [
+      s1,
+      s2,
+      s3,
+      s4,
+    ]
+    _ -> []
+  }
+  |> should.equal(["test1", "test2", "test3", "test4"])
+}
+
+pub fn tuple_5_test() {
+  case glatch.get_type(#("test1", "test2", "test3", "test4", "test5")) {
+    IsTuple5(
+      IsString(s1),
+      IsString(s2),
+      IsString(s3),
+      IsString(s4),
+      IsString(s5),
+    ) -> [s1, s2, s3, s4, s5]
+    _ -> []
+  }
+  |> should.equal(["test1", "test2", "test3", "test4", "test5"])
+}
+
+pub fn tuple_6_test() {
+  case
+    glatch.get_type(#("test1", "test2", "test3", "test4", "test5", "test6"))
+  {
+    IsTuple6(
+      IsString(s1),
+      IsString(s2),
+      IsString(s3),
+      IsString(s4),
+      IsString(s5),
+      IsString(s6),
+    ) -> [s1, s2, s3, s4, s5, s6]
+    _ -> []
+  }
+  |> should.equal(["test1", "test2", "test3", "test4", "test5", "test6"])
 }

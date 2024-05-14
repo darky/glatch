@@ -7,6 +7,7 @@ repository = { type = "github", user = "darky", repo = "glatch" }
 [dependencies]
 gleam_stdlib = ">= 0.34.0 and < 2.0.0"
 gledo = ">= 1.0.1"
+gluple = ">= 1.1.0"
 
 [dev-dependencies]
 cleam = ">= 1.5.0"
