@@ -1,5 +1,5 @@
 name = "glatch"
-version = "1.1.0"
+version = "1.1.1"
 description = "Gleam type check using pattern matching"
 licences = ["MIT"]
 repository = { type = "github", user = "darky", repo = "glatch" }
