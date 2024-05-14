@@ -157,86 +157,56 @@ fn try_tuple(item) {
     Ok(1) ->
       gluple.tuple_element(item, 0)
       |> result.map(fn(x) { IsTuple1(get_type(x)) })
-    Ok(2) ->
-      result.all([gluple.tuple_element(item, 0), gluple.tuple_element(item, 1)])
-      |> result.map(fn(x) {
-        let assert Ok(x1) = list.at(x, 0)
-        let assert Ok(x2) = list.at(x, 1)
-        IsTuple2(get_type(x1), get_type(x2))
-      })
-    Ok(3) ->
-      result.all([
-        gluple.tuple_element(item, 0),
-        gluple.tuple_element(item, 1),
-        gluple.tuple_element(item, 2),
-      ])
-      |> result.map(fn(x) {
-        let assert Ok(x1) = list.at(x, 0)
-        let assert Ok(x2) = list.at(x, 1)
-        let assert Ok(x3) = list.at(x, 2)
-        IsTuple3(get_type(x1), get_type(x2), get_type(x3))
-      })
-    Ok(4) ->
-      result.all([
-        gluple.tuple_element(item, 0),
-        gluple.tuple_element(item, 1),
-        gluple.tuple_element(item, 2),
-        gluple.tuple_element(item, 3),
-      ])
-      |> result.map(fn(x) {
-        let assert Ok(x1) = list.at(x, 0)
-        let assert Ok(x2) = list.at(x, 1)
-        let assert Ok(x3) = list.at(x, 2)
-        let assert Ok(x4) = list.at(x, 3)
-        IsTuple4(get_type(x1), get_type(x2), get_type(x3), get_type(x4))
-      })
-    Ok(5) ->
-      result.all([
-        gluple.tuple_element(item, 0),
-        gluple.tuple_element(item, 1),
-        gluple.tuple_element(item, 2),
-        gluple.tuple_element(item, 3),
-        gluple.tuple_element(item, 4),
-      ])
-      |> result.map(fn(x) {
-        let assert Ok(x1) = list.at(x, 0)
-        let assert Ok(x2) = list.at(x, 1)
-        let assert Ok(x3) = list.at(x, 2)
-        let assert Ok(x4) = list.at(x, 3)
-        let assert Ok(x5) = list.at(x, 4)
-        IsTuple5(
-          get_type(x1),
-          get_type(x2),
-          get_type(x3),
-          get_type(x4),
-          get_type(x5),
-        )
-      })
-    Ok(6) ->
-      result.all([
-        gluple.tuple_element(item, 0),
-        gluple.tuple_element(item, 1),
-        gluple.tuple_element(item, 2),
-        gluple.tuple_element(item, 3),
-        gluple.tuple_element(item, 4),
-        gluple.tuple_element(item, 5),
-      ])
-      |> result.map(fn(x) {
-        let assert Ok(x1) = list.at(x, 0)
-        let assert Ok(x2) = list.at(x, 1)
-        let assert Ok(x3) = list.at(x, 2)
-        let assert Ok(x4) = list.at(x, 3)
-        let assert Ok(x5) = list.at(x, 4)
-        let assert Ok(x6) = list.at(x, 5)
-        IsTuple6(
+    Ok(2) -> {
+      let assert Ok(x1) = gluple.tuple_element(item, 0)
+      let assert Ok(x2) = gluple.tuple_element(item, 1)
+      Ok(IsTuple2(get_type(x1), get_type(x2)))
+    }
+    Ok(3) -> {
+      let assert Ok(x1) = gluple.tuple_element(item, 0)
+      let assert Ok(x2) = gluple.tuple_element(item, 1)
+      let assert Ok(x3) = gluple.tuple_element(item, 2)
+      Ok(IsTuple3(get_type(x1), get_type(x2), get_type(x3)))
+    }
+    Ok(4) -> {
+      let assert Ok(x1) = gluple.tuple_element(item, 0)
+      let assert Ok(x2) = gluple.tuple_element(item, 1)
+      let assert Ok(x3) = gluple.tuple_element(item, 2)
+      let assert Ok(x4) = gluple.tuple_element(item, 3)
+      Ok(IsTuple4(get_type(x1), get_type(x2), get_type(x3), get_type(x4)))
+    }
+    Ok(5) -> {
+      let assert Ok(x1) = gluple.tuple_element(item, 0)
+      let assert Ok(x2) = gluple.tuple_element(item, 1)
+      let assert Ok(x3) = gluple.tuple_element(item, 2)
+      let assert Ok(x4) = gluple.tuple_element(item, 3)
+      let assert Ok(x5) = gluple.tuple_element(item, 4)
+      Ok(IsTuple5(
+        get_type(x1),
+        get_type(x2),
+        get_type(x3),
+        get_type(x4),
+        get_type(x5),
+      ))
+    }
+    Ok(6) -> {
+      {
+        let assert Ok(x1) = gluple.tuple_element(item, 0)
+        let assert Ok(x2) = gluple.tuple_element(item, 1)
+        let assert Ok(x3) = gluple.tuple_element(item, 2)
+        let assert Ok(x4) = gluple.tuple_element(item, 3)
+        let assert Ok(x5) = gluple.tuple_element(item, 4)
+        let assert Ok(x6) = gluple.tuple_element(item, 5)
+        Ok(IsTuple6(
           get_type(x1),
           get_type(x2),
           get_type(x3),
           get_type(x4),
           get_type(x5),
           get_type(x6),
-        )
-      })
+        ))
+      }
+    }
     _ -> Error([])
   }
 }
