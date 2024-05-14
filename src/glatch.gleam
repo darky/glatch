@@ -1,3 +1,4 @@
+import gleaf
 import gleam/bool
 import gleam/dict
 import gleam/dynamic
@@ -152,61 +153,20 @@ fn try_dict(item) {
 
 fn try_tuple(item) {
   use <- bool.guard(gluple.is_tuple(item) == False, Error([]))
-  case gluple.tuple_size(item) {
-    Ok(0) -> Ok(IsTuple0)
-    Ok(1) ->
-      gluple.tuple_element(item, 0)
-      |> result.map(fn(x) { IsTuple1(get_type(x)) })
-    Ok(2) -> {
-      let assert Ok(x1) = gluple.tuple_element(item, 0)
-      let assert Ok(x2) = gluple.tuple_element(item, 1)
-      Ok(IsTuple2(get_type(x1), get_type(x2)))
-    }
-    Ok(3) -> {
-      let assert Ok(x1) = gluple.tuple_element(item, 0)
-      let assert Ok(x2) = gluple.tuple_element(item, 1)
-      let assert Ok(x3) = gluple.tuple_element(item, 2)
-      Ok(IsTuple3(get_type(x1), get_type(x2), get_type(x3)))
-    }
-    Ok(4) -> {
-      let assert Ok(x1) = gluple.tuple_element(item, 0)
-      let assert Ok(x2) = gluple.tuple_element(item, 1)
-      let assert Ok(x3) = gluple.tuple_element(item, 2)
-      let assert Ok(x4) = gluple.tuple_element(item, 3)
-      Ok(IsTuple4(get_type(x1), get_type(x2), get_type(x3), get_type(x4)))
-    }
-    Ok(5) -> {
-      let assert Ok(x1) = gluple.tuple_element(item, 0)
-      let assert Ok(x2) = gluple.tuple_element(item, 1)
-      let assert Ok(x3) = gluple.tuple_element(item, 2)
-      let assert Ok(x4) = gluple.tuple_element(item, 3)
-      let assert Ok(x5) = gluple.tuple_element(item, 4)
-      Ok(IsTuple5(
-        get_type(x1),
-        get_type(x2),
-        get_type(x3),
-        get_type(x4),
-        get_type(x5),
-      ))
-    }
-    Ok(6) -> {
-      {
-        let assert Ok(x1) = gluple.tuple_element(item, 0)
-        let assert Ok(x2) = gluple.tuple_element(item, 1)
-        let assert Ok(x3) = gluple.tuple_element(item, 2)
-        let assert Ok(x4) = gluple.tuple_element(item, 3)
-        let assert Ok(x5) = gluple.tuple_element(item, 4)
-        let assert Ok(x6) = gluple.tuple_element(item, 5)
-        Ok(IsTuple6(
-          get_type(x1),
-          get_type(x2),
-          get_type(x3),
-          get_type(x4),
-          get_type(x5),
-          get_type(x6),
-        ))
-      }
-    }
-    _ -> Error([])
-  }
+  let assert Ok(size) = gluple.tuple_size(item)
+  use <- bool.guard(size == 0, Ok(IsTuple0))
+  use <- bool.guard(size > 6, Error([]))
+  let assert Ok(tuple_as_list) = gluple.tuple_to_list(item)
+  tuple_as_list
+  |> list.map(fn(x) { get_type(x) })
+  |> gleaf.apply(case size {
+    1 -> dynamic.from(IsTuple1)
+    2 -> dynamic.from(IsTuple2)
+    3 -> dynamic.from(IsTuple3)
+    4 -> dynamic.from(IsTuple4)
+    5 -> dynamic.from(IsTuple5)
+    6 -> dynamic.from(IsTuple6)
+    _ -> panic as "impossible"
+  })
+  |> Ok
 }
