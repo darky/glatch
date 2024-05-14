@@ -47,7 +47,8 @@ Further documentation can be found at <https://hexdocs.pm/glatch>.
   - [x] key type check
   - [x] value type check
   - [x] empty type check 
-
+- [x] Tuple
+  - [x] Arity 0-6 
 
 ## Development
 
